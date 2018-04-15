@@ -27,14 +27,28 @@ namespace WindowsFormsApp4
 
         private void button1_Click(object sender, EventArgs e)
         {
+            textBox2.Text = "";
+            if (checkBox1.Checked == true)
+            {
+                int num = int.Parse(textBox1.Text);
+                for (int i = 0; i < num; i++)
+                    textBox2.Text += generate() + "\r\n";
+            }
+            else { textBox2.Text = generate(); }
 
-            textBox2.Text = generate();
         }
 
 
+        private static readonly Random rnd = new Random();
+        private static readonly object syncLock = new object();
+        private static int randomNum()
+        {
+            lock (syncLock)
+                return rnd.Next(0, 9);
+        }
         private string generate()
         {
-            Random rnd = new Random();
+
             int cityCode = comboBox1.SelectedIndex + 10;
             int genderCode = (radioButton1.Checked == true) ? 1 : 2;
             int count = 1, count2 = 1, checkNum = 0, IdNum = 0;
@@ -42,7 +56,7 @@ namespace WindowsFormsApp4
             //生成一個隨機的7碼流水號
             while (count < 8)
             {
-                IdNum += count2 * (rnd.Next(0, 9));
+                IdNum += count2 * (randomNum());
                 count2 *= 10;
                 count++;
             }
